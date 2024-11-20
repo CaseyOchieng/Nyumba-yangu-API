@@ -1,12 +1,10 @@
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-
 dotenv.config();
-
+// constants and variables
 const port = 3000;
 const Mongoclient = process.env.MONGODB_URI;
-
 const app = express();
 
 app.listen(port, () => {
