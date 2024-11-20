@@ -1,0 +1,25 @@
+{
+  "name": "mern-estate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "real",
+    "estate",
+    "backend"
+  ],
+  "author": "Casey Ochieng",
+  "license": "ISC",
+  "description": "This is a backend for a real estate website",
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.2",
+    "nodemon": "^3.1.7"
+  }
+}
