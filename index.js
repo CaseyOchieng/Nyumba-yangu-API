@@ -6,6 +6,7 @@ dotenv.config();
 const port = 3000;
 const Mongoclient = process.env.MONGODB_URI;
 const app = express();
+//  routes
 
 app.listen(port, () => {
   mongoose
