@@ -9,15 +9,6 @@ const Mongoclient = process.env.MONGODB_URI;
 const app = express();
 // middlewares.
 app.use(express.json());
-app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  return res.status(statusCode).json({
-    success: false,
-    status: statusCode,
-    message,
-  });
-});
 //  routes
 app.use("/api/auth", authRoutes);
 //App listening to port.
