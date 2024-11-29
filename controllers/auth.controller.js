@@ -2,60 +2,65 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+// 🎉 SIGNUP: When a new user wants to join our app!
 export const signup = async (req, res, next) => {
-  // Getting the username, email and password from the request body
+  // 📝 Getting user's information from the form they filled out
   const { username, email, password } = req.body;
   try {
-    // Hash the password
-
+    // 🔒 Making the password super secret (like putting it in a special blender)
     const hashedPassword = bcryptjs.hashSync(password, 10);
-    // Create new user object
 
+    // 📚 Creating a new page in our big book of users
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
     });
 
-    // and saving it on the database.
-
+    // 💾 Saving the new user's info in our big book (database)
     await newUser.save();
 
+    // 👍 Telling the user "Yay! You're registered!"
     res
       .status(201)
       .json({ success: true, message: "User created successfully" });
   } catch (error) {
-    // Check for duplicate key error (username or email already exists)
+    // 🚫 Checking if someone already took that username or email
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
         message: "Username or email already exists",
       });
     }
-
     next(error);
   }
 };
 
-// This is a placeholder, we will implement the signin logic later.
+// 🔑 SIGNIN: When a user comes back to visit!
 export const signin = async (req, res, next) => {
+  // 📧 Getting the email and password they typed
   const { email, password } = req.body;
-  
-  console.log('Attempting signin with email:', email); // Debug log
-  
+
+  // 🔍 Writing down what email we're looking for (for debugging)
+  console.log("Attempting signin with email:", email);
+
   try {
+    // 📖 Looking in our big book to find the user
     const validUser = await User.findOne({ email });
-    console.log('Database query result:', validUser); // Debug log
-    
+    console.log("Database query result:", validUser);
+
+    // 😕 If we can't find their email in our book
     if (!validUser) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found 🙉",
       });
     }
 
+    // 🔐 Checking if they gave us the right password
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    
+
+    // 🚫 If the password is wrong
     if (!validPassword) {
       return res.status(401).json({
         success: false,
@@ -63,6 +68,7 @@ export const signin = async (req, res, next) => {
       });
     }
 
+    // 🎯 Creating a special bracelet (token) that says they're allowed in
     const token = jwt.sign(
       {
         id: validUser._id,
@@ -70,34 +76,33 @@ export const signin = async (req, res, next) => {
         email: validUser.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "1d" } // ⏰ Bracelet expires after one day
     );
 
-    // Remove password from response
+    // 🙈 Hiding their password before sending their info back
     const { password: pass, ...rest } = validUser._doc;
 
+    // 🎉 Giving them their bracelet and saying welcome back!
     res
       .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        httpOnly: true, // 🔒 Makes the cookie extra safe
+        secure: process.env.NODE_ENV === "production", // 🔐 Even more security
+        sameSite: "strict", // 🛡️ Protects against certain attacks
+        maxAge: 24 * 60 * 60 * 1000, // ⏰ Cookie lasts for 1 day
       })
       .status(200)
       .json({
         success: true,
-        message: "User logged in successfully",
-        user: rest,
+        message: "User logged in successfully 🎉",
+        user: rest, // 📋 Sending back their info (without the password)
       });
-
   } catch (error) {
-    next(error);
+    next(error); // 🚨 If something goes wrong, tell us about it
   }
 };
 
-// This is a placeholder, we will implement the signout logic later.
-
+// 👋 SIGNOUT: When a user wants to leave
 export const signout = (req, res) => {
-  // This is a placeholder, we will implement the signout logic later.
+  // 🔜 We'll add the logout logic here later!
   res.send("Auth");
 };
