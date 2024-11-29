@@ -42,12 +42,12 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   // 🔍 Writing down what email we're looking for (for debugging)
-  console.log("Attempting signin with email:", email);
+  // console.log("Attempting signin with email:", email);
 
   try {
     // 📖 Looking in our big book to find the user
     const validUser = await User.findOne({ email });
-    console.log("Database query result:", validUser);
+    // console.log("Database query result:", validUser); for debugging purposes
 
     // 😕 If we can't find their email in our book
     if (!validUser) {
