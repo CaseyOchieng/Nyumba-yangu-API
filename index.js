@@ -1,9 +1,9 @@
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.routes.js";
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
 
 // load environment variables
 dotenv.config();
@@ -13,10 +13,12 @@ const Mongoclient = process.env.MONGODB_URI;
 const app = express();
 
 // middlewares.
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 //  routes.
