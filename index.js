@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-//App listening to port.
+//App listening to port and connecting to MongoDB
 app.listen(port, () => {
   mongoose
     .connect(Mongoclient)
