@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // we are adding  avatar field
+    avatar: {
+      type: String,
+      default: "../asset/fencing_4216376.png",
+    },
   },
   {
     timestamps: true,

@@ -3,9 +3,10 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
 // 🎉 SIGNUP: When a new user wants to join our app!
-export const signup = async (req, res, next) => {
+export const Signup = async (req, res, next) => {
   // 📝 Getting user's information from the form they filled out
   const { username, email, password } = req.body;
+
   try {
     // 🔒 Making the password super secret (like putting it in a special blender)
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -37,10 +38,9 @@ export const signup = async (req, res, next) => {
 };
 
 // 🔑 SIGNIN: When a user comes back to visit!
-export const signin = async (req, res, next) => {
+export const Signin = async (req, res, next) => {
   // 📧 Getting the email and password they typed
   const { email, password } = req.body;
-
   // 🔍 Writing down what email we're looking for (for debugging)
   // console.log("Attempting signin with email:", email);
 
@@ -101,8 +101,12 @@ export const signin = async (req, res, next) => {
   }
 };
 
+// 🛑 SIGNUP: google signin and sign up
+export const Google = (req, res) => {};
 // 👋 SIGNOUT: When a user wants to leave
-export const signout = (req, res) => {
+export const Signout = (req, res) => {
   // 🔜 We'll add the logout logic here later!
+  res.clearCookie("token");
+  res.status(200).json({ success: true, message: "Signed out successfully" });
   res.send("Auth");
 };
