@@ -97,12 +97,72 @@ export const Signin = async (req, res, next) => {
         user: rest, // 📋 Sending back their info (without the password)
       });
   } catch (error) {
-    next(error); // 🚨 If something goes wrong, tell us about it
+    next(error); // 🚨 If something goes wrong, tell us about it.
   }
 };
-
 // 🛑 SIGNUP: google signin and sign up
-export const Google = (req, res) => {};
+export const Google = async (req, res) => {
+  try {
+    //  get the user info and check if  they already exist in ths database.
+    const user = await User.findOne({ email: req.body.email });
+    // separate the user password and the rest of the info
+    // if the user already exists, update their info.
+    if (user) {
+      const { password: pass, ...rest } = user._doc;
+      const token = jwt.sign(
+        {
+          id: user._id,
+        },
+        process.env.JWT_SECRET
+      );
+      // we send  response with the user info and the token
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json({ success: true, user: rest });
+    } else {
+      // if the user doesn't exist, create a new user.
+      //make a random password  generator
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      //hashedPassword will be the password that will be saved in the database
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      // Creating a new user and save it in the database.
+      const newUser = new User({
+        username:
+          req.body.username.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-8),
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photoUrl,
+      });
+      // saving the new user in the database.
+      await newUser.save();
+      // sending the token and the user info to the frontend.
+      const token = jwt.sign(
+        {
+          id: newUser._id,
+        },
+        process.env.JWT_SECRET
+      );
+      //send the token and the user info to the frontend
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json(rest);
+    }
+    // if something goes wrong, log it in the console.
+    res.status(500).json({ success: false, message: error.message });
+    console.error(error);
+  } catch (error) {
+    console.log(error);
+  }
+};
 // 👋 SIGNOUT: When a user wants to leave
 export const Signout = (req, res) => {
   // 🔜 We'll add the logout logic here later!
