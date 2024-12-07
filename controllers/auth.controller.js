@@ -154,13 +154,20 @@ export const Google = async (req, res) => {
           httpOnly: true,
         })
         .status(200)
-        .json(rest);
+        .json({
+          success: true,
+          user: {
+            username: newUser.username,
+            email: newUser.email,
+            avatar: newUser.avatar,
+          },
+        });
     }
     // if something goes wrong, log it in the console.
     res.status(500).json({ success: false, message: error.message });
     console.error(error);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 // 👋 SIGNOUT: When a user wants to leave
