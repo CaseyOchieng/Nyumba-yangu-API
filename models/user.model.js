@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema(
     // we are adding  avatar field
     avatar: {
       type: String,
-      default: "../asset/fencing_4216376.png",
+      default:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fvectors%2Fblank-profile-picture-mystery-man-973460%2F&psig=AOvVaw18KJMigC-lMVfHcn3AjBpO&ust=1734614533319000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCJD8p-y0sYoDFQAAAAAdAAAAABAE",
     },
   },
   {
